@@ -2745,8 +2745,9 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 <audio id="spinSound" src="spin.mp3" preload="auto"></audio>
 
+<div id="time-since-counter"></div>
+
 <script>
-// Live timer since 03 Feb 2025, 00:00 AM IST
 function updateTimeSince() {
   const startTime = new Date("2025-02-03T00:00:00+05:30").getTime();
   const now = Date.now();
@@ -2757,16 +2758,13 @@ function updateTimeSince() {
   const minutes = Math.floor((diff % 3600000) / 60000);
   const seconds = Math.floor((diff % 60000) / 1000);
 
-  const counter = document.getElementById("time-since-counter");
-  if (counter) {
-    counter.innerHTML =
-      `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds…<br>
-       since I met and fell for you.`;
-  }
+  document.getElementById("time-since-counter").innerHTML =
+    `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
 }
 
 updateTimeSince();
 setInterval(updateTimeSince, 1000);
 </script>
+</body>
 </body>
 </html>
