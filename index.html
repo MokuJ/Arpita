@@ -1029,7 +1029,7 @@
   <div id="stars"></div>
 
 <!-- ⏳ TIME SINCE COLLAPSIBLE -->
-<button class="timeBtn">⏳ Time Since</button>
+<button class="sweet-collapsible">⏳ Time Since</button>
 <div class="sweet-content">
   <p id="time-since-counter" style="text-align:center; margin-top:10px; color: #ccc; font-weight: 500;"></p>
 </div>
@@ -1769,13 +1769,16 @@ for (let i = 0; i < collapsibles.length; i++) {
   </div>
 
 <!-- 🌌 STARGAZE COLLAPSIBLE -->
-<button class="sweet-collapsible" id="stargazeBtn">🌌 Stargaze</button>
+<button class="sweet-collapsible">🌌 Stargaze</button>
 <div class="sweet-content">
-  <div id="star-map-container"></div>
+  <div id="star-map-container">
+    <iframe src="https://virtualsky.lco.global/embed/index.html?longitude=77.1025&latitude=28.7041&constellations=true&showstarlabels=true&projection=stereo&gridlines_az=true&live=true"
+      width="100%" height="400px" frameborder="0" style="border-radius: 12px;"></iframe>
 
-  <p style="margin-top: 10px; text-align: center; font-style: italic; font-size: 1em; color: #ccc;">
-    All these stars in the sky, and my eyes find mine ✨
-  </p>
+    <p style="margin-top: 10px; text-align: center; font-style: italic; font-size: 1em; color: #ccc;">
+      All these stars in the sky, and my eyes find mine ✨
+    </p>
+  </div>
 </div>
 
 
@@ -2745,10 +2748,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <div id="time-since-counter"></div>
 
 <script>
-const btn = document.getElementById("timeBtn");
-const output = document.getElementById("time-since-counter");
-
-btn.addEventListener("click", () => {
+function updateTimeSince() {
   const startTime = new Date("2025-02-03T00:00:00+05:30").getTime();
   const now = Date.now();
   const diff = now - startTime;
@@ -2758,9 +2758,12 @@ btn.addEventListener("click", () => {
   const minutes = Math.floor((diff % 3600000) / 60000);
   const seconds = Math.floor((diff % 60000) / 1000);
 
-  output.innerHTML =
+  document.getElementById("time-since-counter").innerHTML =
     `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
-});
+}
+
+updateTimeSince();
+setInterval(updateTimeSince, 1000);
 </script>
 </body>
 </body>
