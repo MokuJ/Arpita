@@ -2797,5 +2797,96 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script>
+(function FORCE_EVERYTHING() {
+  // ---------- SAFE DOM READY ----------
+  function onReady(fn) {
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+      setTimeout(fn, 1);
+    } else {
+      document.addEventListener("DOMContentLoaded", fn);
+    }
+  }
+
+  onReady(() => {
+
+    /* =========================================================
+       ⏳ FORCE "TIME SINCE" — NO DEPENDENCIES
+       ========================================================= */
+    (function forceTimeSince() {
+      const counter = document.getElementById("time-since-counter");
+      if (!counter) return;
+
+      const start = new Date("2025-02-03T00:00:00+05:30").getTime();
+
+      function tick() {
+        const now = Date.now();
+        let d = now - start;
+
+        const days = Math.floor(d / 86400000); d %= 86400000;
+        const hours = Math.floor(d / 3600000); d %= 3600000;
+        const minutes = Math.floor(d / 60000); d %= 60000;
+        const seconds = Math.floor(d / 1000);
+
+        counter.textContent =
+          `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+    /* =========================================================
+       🌌 FORCE STARGAZE — BYPASS COLLAPSIBLES COMPLETELY
+       ========================================================= */
+    (function forceStargaze() {
+      const btn = document.querySelector(
+        "button#stargazeBtn, button:contains('Stargaze'), .sweet-collapsible"
+      );
+
+      const container =
+        document.getElementById("star-map-container") ||
+        document.getElementById("stargazeContent") ||
+        document.querySelector(".sweet-content");
+
+      if (!btn || !container) return;
+
+      let loaded = false;
+
+      btn.addEventListener("click", () => {
+        // Force visibility
+        container.style.display = "block";
+        container.style.maxHeight = "none";
+        container.style.opacity = "1";
+
+        if (!loaded) {
+          container.insertAdjacentHTML(
+            "afterbegin",
+            `
+            <iframe
+              src="https://virtualsky.lco.global/embed/index.html
+                ?longitude=77.1025
+                &latitude=28.7041
+                &constellations=true
+                &showstarlabels=true
+                &projection=stereo
+                &gridlines_az=true
+                &live=true"
+              width="100%"
+              height="400"
+              frameborder="0"
+              style="border-radius:12px; display:block;"
+            ></iframe>
+            `
+          );
+          loaded = true;
+        }
+      });
+    })();
+
+  });
+})();
+</script>
+
 </body>
 </html>
