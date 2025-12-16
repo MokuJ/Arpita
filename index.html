@@ -2798,95 +2798,84 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script>
-(function FORCE_EVERYTHING() {
-  // ---------- SAFE DOM READY ----------
-  function onReady(fn) {
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-      setTimeout(fn, 1);
-    } else {
-      document.addEventListener("DOMContentLoaded", fn);
-    }
-  }
+/* ========= ABSOLUTE FORCE MODE ========= */
+(function () {
 
-  onReady(() => {
+  /* ---------- FORCE TIMER ---------- */
+  const TIMER_START = new Date("2025-02-03T00:00:00+05:30").getTime();
 
-    /* =========================================================
-       ⏳ FORCE "TIME SINCE" — NO DEPENDENCIES
-       ========================================================= */
-    (function forceTimeSince() {
-      const counter = document.getElementById("time-since-counter");
-      if (!counter) return;
+  setInterval(() => {
+    const el = document.getElementById("time-since-counter");
+    if (!el) return;
 
-      const start = new Date("2025-02-03T00:00:00+05:30").getTime();
+    const now = Date.now();
+    let diff = now - TIMER_START;
 
-      function tick() {
-        const now = Date.now();
-        let d = now - start;
+    const d = Math.floor(diff / 86400000); diff %= 86400000;
+    const h = Math.floor(diff / 3600000); diff %= 3600000;
+    const m = Math.floor(diff / 60000);
+    const s = Math.floor((diff / 1000) % 60);
 
-        const days = Math.floor(d / 86400000); d %= 86400000;
-        const hours = Math.floor(d / 3600000); d %= 3600000;
-        const minutes = Math.floor(d / 60000); d %= 60000;
-        const seconds = Math.floor(d / 1000);
+    el.textContent = `${d} days ${h} hours ${m} minutes ${s} seconds`;
+  }, 1000);
 
-        counter.textContent =
-          `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+  /* ---------- FORCE STARGAZE ---------- */
+  let starLoaded = false;
+
+  setInterval(() => {
+    if (starLoaded) return;
+
+    // find ANY button with Stargaze text
+    const buttons = document.querySelectorAll("button");
+    let starBtn = null;
+
+    buttons.forEach(b => {
+      if (b.innerText && b.innerText.toLowerCase().includes("stargaze")) {
+        starBtn = b;
       }
+    });
 
-      tick();
-      setInterval(tick, 1000);
-    })();
+    if (!starBtn) return;
 
-    /* =========================================================
-       🌌 FORCE STARGAZE — BYPASS COLLAPSIBLES COMPLETELY
-       ========================================================= */
-    (function forceStargaze() {
-      const btn = document.querySelector(
-        "button#stargazeBtn, button:contains('Stargaze'), .sweet-collapsible"
-      );
+    starBtn.addEventListener("click", () => {
+      if (starLoaded) return;
 
-      const container =
+      // find or create container
+      let box =
         document.getElementById("star-map-container") ||
         document.getElementById("stargazeContent") ||
         document.querySelector(".sweet-content");
 
-      if (!btn || !container) return;
+      if (!box) {
+        box = document.createElement("div");
+        starBtn.insertAdjacentElement("afterend", box);
+      }
 
-      let loaded = false;
+      box.style.display = "block";
+      box.style.maxHeight = "none";
+      box.style.opacity = "1";
 
-      btn.addEventListener("click", () => {
-        // Force visibility
-        container.style.display = "block";
-        container.style.maxHeight = "none";
-        container.style.opacity = "1";
+      box.innerHTML = `
+        <iframe
+          src="https://virtualsky.lco.global/embed/index.html?longitude=77.1025&latitude=28.7041&constellations=true&showstarlabels=true&live=true"
+          width="100%"
+          height="400"
+          frameborder="0"
+          style="border-radius:12px;display:block;"
+        ></iframe>
+        <p style="margin-top:10px;text-align:center;font-style:italic;color:#ccc;">
+          All these stars in the sky, and my eyes find mine ✨
+        </p>
+      `;
 
-        if (!loaded) {
-          container.insertAdjacentHTML(
-            "afterbegin",
-            `
-            <iframe
-              src="https://virtualsky.lco.global/embed/index.html
-                ?longitude=77.1025
-                &latitude=28.7041
-                &constellations=true
-                &showstarlabels=true
-                &projection=stereo
-                &gridlines_az=true
-                &live=true"
-              width="100%"
-              height="400"
-              frameborder="0"
-              style="border-radius:12px; display:block;"
-            ></iframe>
-            `
-          );
-          loaded = true;
-        }
-      });
-    })();
+      starLoaded = true;
+    });
 
-  });
+  }, 500);
+
 })();
 </script>
+
 
 </body>
 </html>
