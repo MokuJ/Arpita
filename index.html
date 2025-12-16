@@ -1028,13 +1028,19 @@
 
   <div id="stars"></div>
 
-<button class="sweet-collapsible" id="timeBtn">⏳ Time Since</button>
-<div class="sweet-content" id="timeContent">
+<button class="sweet-collapsible">⏳ Time Since</button>
+<div class="sweet-content">
   <p id="time-since-counter"></p>
 </div>
 
-<button class="sweet-collapsible" id="stargazeBtn">🌌 Stargaze</button>
-<div class="sweet-content" id="star-map"></div>
+<button class="sweet-collapsible">🌌 Stargaze</button>
+<div class="sweet-content">
+  <div id="star-map-container"></div>
+
+  <p style="margin-top:10px;text-align:center;font-style:italic;color:#ccc;">
+    All these stars in the sky, and my eyes find mine ✨
+  </p>
+</div>
 
   <div class="info-box">
     <strong style="color: #e2b0b0;">Fact:</strong>
@@ -2739,53 +2745,41 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 (function () {
   const startDate = new Date("2025-02-03T00:00:00+05:30").getTime();
-  const btn = document.getElementById("timeBtn");
-  const box = document.getElementById("timeContent");
-  const out = document.getElementById("time-since-counter");
+  const counter = document.getElementById("time-since-counter");
+  if (!counter) return;
 
-  let interval = null;
-  let open = false;
+  function update() {
+    let diff = Date.now() - startDate;
 
-  btn.addEventListener("click", () => {
-    open = !open;
-    box.style.display = open ? "block" : "none";
+    const d = Math.floor(diff / 86400000); diff %= 86400000;
+    const h = Math.floor(diff / 3600000); diff %= 3600000;
+    const m = Math.floor(diff / 60000);
+    const s = Math.floor((diff / 1000) % 60);
 
-    if (open && !interval) {
-      function update() {
-        let diff = Date.now() - startDate;
-        const d = Math.floor(diff / 86400000); diff %= 86400000;
-        const h = Math.floor(diff / 3600000); diff %= 3600000;
-        const m = Math.floor(diff / 60000);
-        const s = Math.floor((diff / 1000) % 60);
-        out.textContent =
-          `${d} days ${h} hours ${m} minutes ${s} seconds`;
-      }
-      update();
-      interval = setInterval(update, 1000);
-    }
+    counter.textContent =
+      `${d} days ${h} hours ${m} minutes ${s} seconds`;
+  }
 
-    if (!open && interval) {
-      clearInterval(interval);
-      interval = null;
-    }
-  });
+  update();
+  setInterval(update, 1000);
 })();
 </script>
 
 <script>
 (function () {
-  const btn = document.getElementById("stargazeBtn");
-  const box = document.getElementById("star-map");
+  const container = document.getElementById("star-map-container");
+  if (!container) return;
 
   let loaded = false;
-  let open = false;
 
-  btn.addEventListener("click", () => {
-    open = !open;
-    box.style.display = open ? "block" : "none";
+  document.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("sweet-collapsible")) return;
+    if (!e.target.innerText.toLowerCase().includes("stargaze")) return;
+    if (loaded) return;
 
-    if (open && !loaded) {
-      box.innerHTML = `
+    // delay ensures collapsible has opened and height exists
+    setTimeout(() => {
+      container.innerHTML = `
         <iframe
           src="https://virtualsky.lco.global/embed/index.html?longitude=77.1025&latitude=28.7041&constellations=true&showstarlabels=true&live=true"
           width="100%"
@@ -2793,16 +2787,12 @@ document.addEventListener("DOMContentLoaded", function () {
           frameborder="0"
           style="border-radius:12px;"
         ></iframe>
-        <p style="margin-top:10px;text-align:center;font-style:italic;color:#ccc;">
-          All these stars in the sky, and my eyes find mine ✨
-        </p>
       `;
       loaded = true;
-    }
+    }, 300);
   });
 })();
 </script>
-
 
 </body>
 </html>
