@@ -1028,11 +1028,11 @@
 
   <div id="stars"></div>
 
-<!-- ⏳ TIME SINCE COLLAPSIBLE -->
-<button class="sweet-collapsible">⏳ Time Since</button>
-<div class="sweet-content">
-  <p id="time-since-counter" style="text-align:center; margin-top:10px; color: #ccc; font-weight: 500;"></p>
-</div>
+<button id="timeBtn">⏳ Time Since</button>
+<div id="time-since-counter"></div>
+
+<button id="stargazeBtn">🌌 Stargaze</button>
+<div id="star-map" style="display:none; margin-top:15px;"></div>
 
   <div class="info-box">
     <strong style="color: #e2b0b0;">Fact:</strong>
@@ -1768,9 +1768,7 @@ for (let i = 0; i < collapsibles.length; i++) {
     </div>
   </div>
 
-<!-- 🌌 STARGAZE COLLAPSIBLE -->
-<button class="sweet-collapsible" id="stargazeBtn">🌌 Stargaze</button>
-<div class="sweet-content" id="stargazeContent"></div>
+
 
 
 </script>
@@ -2736,47 +2734,42 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 <audio id="spinSound" src="spin.mp3" preload="auto"></audio>
 
-<div id="time-since-counter"></div>
-
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const counter = document.getElementById("time-since-counter");
-  if (!counter) return;
+(function () {
+  const startDate = new Date("2025-02-03T00:00:00+05:30").getTime();
+  const btn = document.getElementById("timeBtn");
+  const out = document.getElementById("time-since-counter");
+  let interval = null;
 
-  const startDate = new Date("2025-02-03T00:00:00+05:30");
+  btn.addEventListener("click", () => {
+    if (interval) return; // prevent double timers
 
-  function updateTime() {
-    const now = new Date();
-    let diff = now - startDate;
+    function update() {
+      let diff = Date.now() - startDate;
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    diff %= 1000 * 60 * 60 * 24;
+      const d = Math.floor(diff / 86400000); diff %= 86400000;
+      const h = Math.floor(diff / 3600000); diff %= 3600000;
+      const m = Math.floor(diff / 60000);
+      const s = Math.floor((diff / 1000) % 60);
 
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    diff %= 1000 * 60 * 60;
+      out.textContent =
+        `${d} days ${h} hours ${m} minutes ${s} seconds`;
+    }
 
-    const minutes = Math.floor(diff / (1000 * 60));
-    const seconds = Math.floor((diff / 1000) % 60);
-
-    counter.textContent =
-      `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
-  }
-
-  updateTime();
-  setInterval(updateTime, 1000);
-});
+    update();
+    interval = setInterval(update, 1000);
+  });
+})();
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+(function () {
   const btn = document.getElementById("stargazeBtn");
-  const box = document.getElementById("stargazeContent");
+  const box = document.getElementById("star-map");
   let loaded = false;
 
-  if (!btn || !box) return;
-
   btn.addEventListener("click", () => {
-    box.classList.toggle("open");
+    box.style.display = "block";
 
     if (!loaded) {
       box.innerHTML = `
@@ -2787,95 +2780,15 @@ document.addEventListener("DOMContentLoaded", () => {
           frameborder="0"
           style="border-radius:12px;"
         ></iframe>
-        <p style="margin-top:10px;text-align:center;font-style:italic;color:#ccc;">
+        <p style="text-align:center;font-style:italic;color:#ccc;">
           All these stars in the sky, and my eyes find mine ✨
         </p>
       `;
       loaded = true;
     }
   });
-});
-</script>
-
-<script>
-/* ========= ABSOLUTE FORCE MODE ========= */
-(function () {
-
-  /* ---------- FORCE TIMER ---------- */
-  const TIMER_START = new Date("2025-02-03T00:00:00+05:30").getTime();
-
-  setInterval(() => {
-    const el = document.getElementById("time-since-counter");
-    if (!el) return;
-
-    const now = Date.now();
-    let diff = now - TIMER_START;
-
-    const d = Math.floor(diff / 86400000); diff %= 86400000;
-    const h = Math.floor(diff / 3600000); diff %= 3600000;
-    const m = Math.floor(diff / 60000);
-    const s = Math.floor((diff / 1000) % 60);
-
-    el.textContent = `${d} days ${h} hours ${m} minutes ${s} seconds`;
-  }, 1000);
-
-  /* ---------- FORCE STARGAZE ---------- */
-  let starLoaded = false;
-
-  setInterval(() => {
-    if (starLoaded) return;
-
-    // find ANY button with Stargaze text
-    const buttons = document.querySelectorAll("button");
-    let starBtn = null;
-
-    buttons.forEach(b => {
-      if (b.innerText && b.innerText.toLowerCase().includes("stargaze")) {
-        starBtn = b;
-      }
-    });
-
-    if (!starBtn) return;
-
-    starBtn.addEventListener("click", () => {
-      if (starLoaded) return;
-
-      // find or create container
-      let box =
-        document.getElementById("star-map-container") ||
-        document.getElementById("stargazeContent") ||
-        document.querySelector(".sweet-content");
-
-      if (!box) {
-        box = document.createElement("div");
-        starBtn.insertAdjacentElement("afterend", box);
-      }
-
-      box.style.display = "block";
-      box.style.maxHeight = "none";
-      box.style.opacity = "1";
-
-      box.innerHTML = `
-        <iframe
-          src="https://virtualsky.lco.global/embed/index.html?longitude=77.1025&latitude=28.7041&constellations=true&showstarlabels=true&live=true"
-          width="100%"
-          height="400"
-          frameborder="0"
-          style="border-radius:12px;display:block;"
-        ></iframe>
-        <p style="margin-top:10px;text-align:center;font-style:italic;color:#ccc;">
-          All these stars in the sky, and my eyes find mine ✨
-        </p>
-      `;
-
-      starLoaded = true;
-    });
-
-  }, 500);
-
 })();
 </script>
-
 
 </body>
 </html>
