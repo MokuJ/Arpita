@@ -1032,6 +1032,9 @@
 <div class="sweet-content">
   <p id="time-since-counter"></p>
 </div>
+#time-since-counter {
+  text-align: center;
+}
 
 <button class="sweet-collapsible">🌌 Stargaze</button>
 <div class="sweet-content">
@@ -2832,7 +2835,9 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(update, 1000);
   }
 
-  /* ---------- STARGAZE ---------- */
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
   const starContainer = document.getElementById("star-map-container");
   let starLoaded = false;
 
@@ -2852,10 +2857,20 @@ document.addEventListener("DOMContentLoaded", () => {
             style="border-radius:12px;"
           ></iframe>
         `;
+
+        // 🔥 FORCE COLLAPSIBLE TO RECALCULATE HEIGHT
+        const content = btn.nextElementSibling;
+        setTimeout(() => {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }, 100);
+
         starLoaded = true;
       }, 300);
     });
   });
+
+});
+</script>
 
 });
 </script>
