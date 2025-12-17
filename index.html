@@ -913,6 +913,28 @@
   max-height: 1000px;
   margin-top: 10px;
 }
+
+#star-map-container {
+  width: 100%;
+  height: 400px;
+  min-height: 400px;
+}
+<style>
+  /* existing styles */
+
+  .sweet-content {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+  }
+
+  /* 🔥 ADD THIS AT THE BOTTOM */
+  #star-map-container {
+    width: 100%;
+    height: 400px;
+    min-height: 400px;
+  }
+</style>
 </style>
   </style>
   <!-- Confetti + Typewriter Styles -->
@@ -1028,7 +1050,7 @@
 
   <div id="stars"></div>
 
-<button class="sweet-collapsible">⏳ Time Since</button>
+<button class="sweet-collapsible">⏳ Time Since </button>
 <div class="sweet-content">
   <p id="time-since-counter" style="text-align:center;"></p>
 </div>
@@ -2861,5 +2883,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script>
+document.querySelectorAll(".sweet-collapsible").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const content = btn.nextElementSibling;
+    const isOpen = content.classList.contains("open");
+
+    if (isOpen) {
+      content.style.maxHeight = null;
+      content.classList.remove("open");
+    } else {
+      content.classList.add("open");
+      setTimeout(() => {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }, 50);
+    }
+  });
+});
+</script>
 </body>
 </html>
