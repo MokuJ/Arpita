@@ -2887,17 +2887,21 @@ document.addEventListener("DOMContentLoaded", () => {
 document.querySelectorAll(".sweet-collapsible").forEach(btn => {
   btn.addEventListener("click", () => {
     const content = btn.nextElementSibling;
-    const isOpen = content.classList.contains("open");
 
-    if (isOpen) {
+    // CLOSE
+    if (content.style.maxHeight && content.style.maxHeight !== "0px") {
       content.style.maxHeight = null;
-      content.classList.remove("open");
-    } else {
-      content.classList.add("open");
-      setTimeout(() => {
-        content.style.maxHeight = content.scrollHeight + "px";
-      }, 50);
+      btn.classList.remove("open");
+      return;
     }
+
+    // OPEN
+    btn.classList.add("open");
+
+    // allow layout to settle, then expand
+    setTimeout(() => {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }, 50);
   });
 });
 </script>
