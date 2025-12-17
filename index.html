@@ -2794,5 +2794,71 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+<script>
+/* ========= UNIVERSAL COLLAPSIBLE + FEATURES ========= */
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ---------- COLLAPSIBLE ENGINE ---------- */
+  document.querySelectorAll(".sweet-collapsible").forEach(btn => {
+    btn.addEventListener("click", () => {
+      btn.classList.toggle("active");
+      const content = btn.nextElementSibling;
+      if (!content) return;
+
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  });
+
+  /* ---------- TIME SINCE ---------- */
+  const counter = document.getElementById("time-since-counter");
+  if (counter) {
+    const start = new Date("2025-02-03T00:00:00+05:30").getTime();
+
+    function update() {
+      let d = Date.now() - start;
+      const days = Math.floor(d / 86400000); d %= 86400000;
+      const hrs = Math.floor(d / 3600000); d %= 3600000;
+      const mins = Math.floor(d / 60000);
+      const secs = Math.floor((d / 1000) % 60);
+      counter.textContent =
+        `${days} days ${hrs} hours ${mins} minutes ${secs} seconds`;
+    }
+
+    update();
+    setInterval(update, 1000);
+  }
+
+  /* ---------- STARGAZE ---------- */
+  const starContainer = document.getElementById("star-map-container");
+  let starLoaded = false;
+
+  document.querySelectorAll(".sweet-collapsible").forEach(btn => {
+    if (!btn.innerText.toLowerCase().includes("stargaze")) return;
+
+    btn.addEventListener("click", () => {
+      if (starLoaded || !starContainer) return;
+
+      setTimeout(() => {
+        starContainer.innerHTML = `
+          <iframe
+            src="https://virtualsky.lco.global/embed/index.html?longitude=77.1025&latitude=28.7041&constellations=true&showstarlabels=true&live=true"
+            width="100%"
+            height="400"
+            frameborder="0"
+            style="border-radius:12px;"
+          ></iframe>
+        `;
+        starLoaded = true;
+      }, 300);
+    });
+  });
+
+});
+</script>
+
 </body>
 </html>
