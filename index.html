@@ -976,6 +976,46 @@
     100% { box-shadow: 0 0 10px rgba(255, 107, 107, 0.2); }
   }
 </style>
+
+<style>
+  /* 💞 US PHOTO SLIDER */
+.us-container {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 20px auto;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.us-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.us-track img {
+  width: 100%;
+  flex-shrink: 0;
+  border-radius: 14px;
+}
+
+.us-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  font-size: 24px;
+  padding: 6px 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.us-arrow.left { left: 8px; }
+.us-arrow.right { right: 8px; }
+</style>
+
 <style>
   #musicBox {
     background-color: #111;
@@ -2910,5 +2950,59 @@ document.querySelectorAll(".sweet-collapsible").forEach(button => {
   });
 });
 </script>
+
+</div> <!-- end of meme slider -->
+
+<!-- 💞 US PHOTO SLIDER (ADD HERE) -->
+<div class="us-container">
+  <button class="us-arrow left">&#10094;</button>
+
+  <div class="us-track">
+    <img src="us.jpg">
+    <img src="us2.jpg">
+    <img src="us3.jpg">
+    <img src="us4.jpg">
+    <img src="us5.jpg">
+    <img src="us6.jpg">
+    <img src="us7.jpg">
+    <img src="us8.jpg">
+    <img src="us9.jpg">
+    <img src="us10.jpg">
+    <img src="us11.jpg">
+  </div>
+
+  <button class="us-arrow right">&#10095;</button>
+</div>
+
+<script>
+const usTrack = document.querySelector(".us-track");
+const usImages = document.querySelectorAll(".us-track img");
+const usLeft = document.querySelector(".us-arrow.left");
+const usRight = document.querySelector(".us-arrow.right");
+
+let usIndex = 0;
+
+function updateUsSlider() {
+  usTrack.style.transform = `translateX(-${usIndex * 100}%)`;
+}
+
+usRight.addEventListener("click", () => {
+  usIndex = (usIndex + 1) % usImages.length;
+  updateUsSlider();
+});
+
+usLeft.addEventListener("click", () => {
+  usIndex = (usIndex - 1 + usImages.length) % usImages.length;
+  updateUsSlider();
+});
+
+// auto-scroll
+setInterval(() => {
+  usIndex = (usIndex + 1) % usImages.length;
+  updateUsSlider();
+}, 4000);
+</script>
+
+
 </body>
 </html>
