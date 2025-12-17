@@ -2884,24 +2884,29 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <script>
-document.querySelectorAll(".sweet-collapsible").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const content = btn.nextElementSibling;
+document.querySelectorAll(".sweet-collapsible").forEach(button => {
+  button.addEventListener("click", () => {
+    const content = button.nextElementSibling;
+    const isOpen = content.classList.contains("open");
 
     // CLOSE
-    if (content.style.maxHeight && content.style.maxHeight !== "0px") {
-      content.style.maxHeight = null;
-      btn.classList.remove("open");
+    if (isOpen) {
+      content.style.maxHeight = "0px";
+      content.classList.remove("open");
       return;
     }
 
     // OPEN
-    btn.classList.add("open");
+    content.classList.add("open");
 
-    // allow layout to settle, then expand
-    setTimeout(() => {
-      content.style.maxHeight = content.scrollHeight + "px";
-    }, 50);
+    // force reflow (IMPORTANT)
+    content.style.maxHeight = "none";
+    const height = content.scrollHeight + "px";
+    content.style.maxHeight = "0px";
+
+    requestAnimationFrame(() => {
+      content.style.maxHeight = height;
+    });
   });
 });
 </script>
