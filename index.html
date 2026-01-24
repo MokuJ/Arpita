@@ -1703,43 +1703,6 @@ for (let i = 0; i < collapsibles.length; i++) {
 }
 </script>
   
-<!-- 💍 Marry Me? Collapsible -->
-<button id="marryMeBtn" style="
-  background: radial-gradient(circle at center, #4e2c2c, #2a1a1a);
-  color: #ffe5e5;
-  font-size: 1.3em;
-  font-weight: 600;
-  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-  text-align: center;
-  border: 2px solid #ff6b6b;
-  border-radius: 12px;
-  padding: 14px 24px;
-  max-width: 300px;
-  margin: 40px auto 10px auto;
-  display: block;
-  box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
-  animation: pulseGlow 3s infinite ease-in-out;
-  cursor: pointer;
-">
-  💍 Marry me?
-</button>
-
-<div id="marryMeContent" style="
-  display: none;
-  background: linear-gradient(to bottom, #2c1b1b, #1a0d0d);
-  border: 2px solid #ff9999;
-  border-radius: 14px;
-  padding: 30px;
-  color: #fff0f0;
-  font-size: 1.4em;
-  font-family: 'Georgia', serif;
-  max-width: 700px;
-  margin: 0 auto 60px auto;
-  box-shadow: 0 0 25px rgba(255, 77, 77, 0.2);
-  text-align: center;
-  line-height: 1.8;
-  text-shadow: 1px 1px 2px #000;
-"></div>
 
   <div class="music-collection-container">
     <button id="musicBtn" onclick="toggleMusicCollection()">
@@ -2755,52 +2718,6 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
-
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("marryMeBtn");
-    const box = document.getElementById("marryMeContent");
-    const message = "Will you marry me, Arpita?";
-    let clicked = false;
-
-    btn.addEventListener("click", () => {
-      const open = box.style.display === "block";
-
-      if (!open && !clicked) {
-        clicked = true;
-        box.style.display = "block";
-        box.innerHTML = `<div class="typewriter-text"></div>`;
-
-        const textBox = box.querySelector(".typewriter-text");
-        let i = 0;
-        const type = () => {
-          if (i < message.length) {
-            textBox.textContent += message.charAt(i++);
-            setTimeout(type, 70);
-          } else {
-            clicked = false;
-          }
-        };
-        type();
-
-        // Confetti!
-        if (typeof confetti === "function") {
-          confetti({
-            particleCount: 200,
-            spread: 120,
-            origin: { y: 0.6 },
-            colors: ['#ff6b6b', '#ffd6d6', '#ffffff']
-          });
-        }
-      } else {
-        box.style.display = "none";
-        box.innerHTML = "";
-        clicked = false;
-      }
-    });
-  });
-</script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const musicBox = document.getElementById("musicBox");
